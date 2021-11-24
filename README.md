@@ -45,4 +45,4 @@ The MATLAB script `example_glmhmm_fit.m` details the process of fitting a GLM-HM
 3. Compares recovered fit to simulated model
 
 ## Credit
-Sarah Jo Venditto
+Written by Sarah Jo Venditto. Please cite this repository
