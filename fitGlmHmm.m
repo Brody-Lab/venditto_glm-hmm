@@ -1,5 +1,5 @@
-function [model,ll,iter] = fitGlmHmm(y,x,w0,A0,varargin)
-%[model, ll, iter] = fitGlmHmm(y, x, w0, A0, varargin)
+function [model,ll,iter,gammas,ll_mean] = fitGlmHmm(y,x,w0,A0,varargin)
+% [model, ll, iter, gammas, ll_mean] = fitGlmHmm(y, x, w0, A0, varargin)
 % Fits a GLM-HMM to data for a logistic sigmoid emissions models. Number of
 % latent states is implicitly taken from the second dimension of w0.
 %
@@ -36,6 +36,8 @@ function [model,ll,iter] = fitGlmHmm(y,x,w0,A0,varargin)
 %   ll              - (1 x NIter) log-likelihood of the model fit
 %   iter            - number of iterations it took for the model to
 %                     converge
+%   gammas          - (Nstates x NTrials) Marginal posterior distribution
+%   ll_mean         - mean log-likelihood of the fit per trial/time point
 %
 % Example call:
 % [model,ll,iter] = fitGlmHmm(y,x,w0,A0,'new_sess',new_sess,'maxiter',2000)
@@ -131,6 +133,7 @@ while i<p.maxiter && (dLL>p.tol || dLL<0)
 end
 [~, ~, ll(i+1)] = runBaumWelch(y,x,model,p.new_sess);
 ll(isnan(ll)) = []; % get rid of nan values
+ll_mean = ll / T;
 iter = i;
 fprintf(' done\n');
 
