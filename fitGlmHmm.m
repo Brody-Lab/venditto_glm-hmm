@@ -37,10 +37,10 @@ function [model,ll,iter,gammas,ll_mean] = fitGlmHmm(y,x,w0,A0,varargin)
 %   iter            - number of iterations it took for the model to
 %                     converge
 %   gammas          - (Nstates x NTrials) Marginal posterior distribution
-%   ll_mean         - mean log-likelihood of the fit per trial/time point
+%   ll_mean         - mean (per trial/time point) log-likelihood of the final fit
 %
 % Example call:
-% [model,ll,iter] = fitGlmHmm(y,x,w0,A0,'new_sess',new_sess,'maxiter',2000)
+% [model,ll,iter,gammas,ll_mean] = fitGlmHmm(y,x,w0,A0,'new_sess',new_sess,'maxiter',2000)
 
 %% %%%%%%%%%%%%%%%%%%%%%% Input parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ip = inputParser;
@@ -133,7 +133,7 @@ while i<p.maxiter && (dLL>p.tol || dLL<0)
 end
 [~, ~, ll(i+1)] = runBaumWelch(y,x,model,p.new_sess);
 ll(isnan(ll)) = []; % get rid of nan values
-ll_mean = ll / T;
+ll_mean = ll(end) / nt;
 iter = i;
 fprintf(' done\n');
 
