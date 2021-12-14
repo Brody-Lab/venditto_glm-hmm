@@ -1,4 +1,4 @@
-function [gammas,xis,ll,ll_norm] = runBaumWelch(y,x,model,new_sess) 
+function [gammas,xis,ll] = runBaumWelch(y,x,model,new_sess) 
 %[gammas,xis,ll] = runBaumWelch(y, x, model, new_sess)
 % Runs the Baum-Welch algorithm to compute latent state posterior
 % distributions. Assumes a model of the form by fitGlmHmm.m
@@ -20,8 +20,7 @@ function [gammas,xis,ll,ll_norm] = runBaumWelch(y,x,model,new_sess)
 %   xis             - (Nstates x Nstates x Ntrials) Joint posterior
 %                     distribution
 %   ll              - log-likelihood of the fit
-%   ll_norm         - normalized log-likelihood computed as 
-%                     ll_norm = exp(ll/NTrials)
+%   ll_norm         - normalized log-li
 
 %% initialize variables
 nstates = size(model.w,2);     % number of latent states
@@ -55,7 +54,6 @@ for t=1:T
     alphas(:,t) = alphas(:,t)/c(t);                             % normalize 13.59
 end
 ll = sum(log(c));                                               % store log-likelihood
-ll_norm = exp(ll/T);
 
 %% %%%%%%%%%%%%%%%%%%%%%% Backward recursion %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % initialize variables
